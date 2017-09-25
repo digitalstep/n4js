@@ -43,7 +43,7 @@ public class StopWatch {
 
 	public void assertNoneRunning() {
 		if (countRunning() > 0) {
-			throw new IllegalStateException("one or more stop watches are still running");
+			reportAndThrow(new IllegalStateException("one or more stop watches are still running"));
 		}
 	}
 
@@ -145,9 +145,15 @@ public class StopWatch {
 	private SWEntry getEntry(String id) {
 		final SWEntry e = watches.get(id);
 		if (e == null) {
-			throw new IllegalArgumentException("no stop watch found for given id: " + id);
+			reportAndThrow(new IllegalArgumentException("no stop watch found for given id: " + id));
 		}
 		return e;
+	}
+
+	/** Make sure exceptions show up on the console (some clients silently suppress exceptions). */
+	private static void reportAndThrow(RuntimeException th) {
+		System.err.println(th.getMessage());
+		throw th;
 	}
 
 	private static final class SWEntry {
@@ -173,7 +179,7 @@ public class StopWatch {
 
 		long start() {
 			if (isRunning()) {
-				throw new IllegalStateException("call to #start() while stop watch is running; id: " + id);
+				reportAndThrow(new IllegalStateException("call to #start() while stop watch is running; id: " + id));
 			}
 			token = rng.nextLong();
 			thread = Thread.currentThread();
@@ -184,17 +190,17 @@ public class StopWatch {
 		@SuppressWarnings("hiding")
 		void stop(long token) {
 			if (!isRunning()) {
-				throw new IllegalStateException(
-						"call to #stop() while stop watch isn't running; id: " + id);
+				reportAndThrow(new IllegalStateException(
+						"call to #stop() while stop watch isn't running; id: " + id));
 			}
 			if (!Objects.equals(token, this.token)) {
-				throw new IllegalArgumentException(
-						"call to #stop() with incorrect token (mismatch of #start() and #stop() calls); id: " + id);
+				reportAndThrow(new IllegalArgumentException(
+						"call to #stop() with incorrect token (mismatch of #start() and #stop() calls); id: " + id));
 			}
-			// if (!Thread.currentThread().equals(this.thread)) {
-			// throw new IllegalArgumentException(
-			// "method #stop() called from different thread than method #start(); id: " + id);
-			// }
+			if (!Thread.currentThread().equals(this.thread)) {
+				reportAndThrow(new IllegalArgumentException(
+						"method #stop() called from different thread than method #start(); id: " + id));
+			}
 			this.sw.stop();
 			this.token = null;
 			this.thread = null;
