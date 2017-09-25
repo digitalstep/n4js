@@ -14,6 +14,7 @@ import java.util.List;
 
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.resource.Resource;
+import org.eclipse.n4js.N4JSGlobals;
 import org.eclipse.n4js.projectModel.IN4JSCore;
 import org.eclipse.n4js.resource.N4JSResource;
 import org.eclipse.xtext.service.OperationCanceledManager;
@@ -46,6 +47,14 @@ public class N4JSResourceValidator extends ResourceValidatorImpl {
 	 */
 	@Override
 	protected void validate(Resource resource, CheckMode mode, CancelIndicator cancelIndicator,
+			IAcceptor<Issue> acceptor) {
+
+		N4JSGlobals.sw.measure("validation", false, () -> {
+			validateInternal(resource, mode, cancelIndicator, acceptor);
+		});
+	}
+
+	private void validateInternal(Resource resource, CheckMode mode, CancelIndicator cancelIndicator,
 			IAcceptor<Issue> acceptor) {
 		operationCanceledManager.checkCanceled(cancelIndicator);
 		if (n4jsCore.isNoValidate(resource.getURI())) {

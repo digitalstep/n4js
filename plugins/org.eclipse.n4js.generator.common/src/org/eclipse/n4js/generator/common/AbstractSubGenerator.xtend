@@ -96,6 +96,11 @@ abstract class AbstractSubGenerator implements ISubGenerator {
 	 * </ul>
 	 */
 	override doGenerate(Resource input, IFileSystemAccess fsa) {
+		N4JSGlobals.sw.measure("transpiler", false, [
+			doGenerateInternal(input, fsa);
+		]);
+	}
+	def private void doGenerateInternal(Resource input, IFileSystemAccess fsa) {
 		try {
 
 			// remove error-marker

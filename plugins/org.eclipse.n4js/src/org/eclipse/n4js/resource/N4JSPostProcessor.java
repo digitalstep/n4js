@@ -18,6 +18,7 @@ import org.eclipse.emf.common.util.TreeIterator;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EReference;
 import org.eclipse.emf.ecore.util.EcoreUtil;
+import org.eclipse.n4js.N4JSGlobals;
 import org.eclipse.n4js.postprocessing.ASTProcessor;
 import org.eclipse.n4js.resource.PostProcessingAwareResource.PostProcessor;
 import org.eclipse.n4js.ts.types.TModule;
@@ -58,6 +59,12 @@ public class N4JSPostProcessor implements PostProcessor {
 
 	@Override
 	public void performPostProcessing(PostProcessingAwareResource resource, CancelIndicator cancelIndicator) {
+		N4JSGlobals.sw.measure("post-processing", true, () -> {
+			performPostProcessingInternal(resource, cancelIndicator);
+		});
+	}
+
+	private void performPostProcessingInternal(PostProcessingAwareResource resource, CancelIndicator cancelIndicator) {
 		final boolean hasBrokenAST = !resource.getErrors().isEmpty();
 		try {
 			// we assume this will not be called for other PostProcessingAwareResource than N4JSResource

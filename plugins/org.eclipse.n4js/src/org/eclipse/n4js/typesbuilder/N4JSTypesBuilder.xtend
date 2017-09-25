@@ -11,6 +11,7 @@
 package org.eclipse.n4js.typesbuilder
 
 import com.google.inject.Inject
+import org.eclipse.n4js.N4JSGlobals
 import org.eclipse.n4js.n4JS.ExportableElement
 import org.eclipse.n4js.n4JS.ExportedVariableStatement
 import org.eclipse.n4js.n4JS.FunctionDeclaration
@@ -140,6 +141,11 @@ public class N4JSTypesBuilder {
 	 * as declared type. The parameterized type ref is then assigned as type ref to the {@link TVariable}.
 	 */
 	def public void createTModuleFromSource(DerivedStateAwareResource resource, boolean preLinkingPhase) {
+		N4JSGlobals.sw.measure("types builder", false, [
+			createTModuleFromSourceInternal(resource, preLinkingPhase);
+		]);
+	}
+	def public void createTModuleFromSourceInternal(DerivedStateAwareResource resource, boolean preLinkingPhase) {
 		val parseResult = resource.getParseResult();
 		if (parseResult !== null) {
 

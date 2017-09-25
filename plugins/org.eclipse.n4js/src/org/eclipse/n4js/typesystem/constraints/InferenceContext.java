@@ -26,6 +26,7 @@ import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 import org.eclipse.core.runtime.OperationCanceledException;
+import org.eclipse.n4js.N4JSGlobals;
 import org.eclipse.n4js.ts.typeRefs.FunctionTypeExprOrRef;
 import org.eclipse.n4js.ts.typeRefs.TypeArgument;
 import org.eclipse.n4js.ts.typeRefs.TypeRef;
@@ -340,6 +341,12 @@ public final class InferenceContext {
 	 * At this time, no partial solutions are returned in case of unsolvable constraint systems.
 	 */
 	public Map<InferenceVariable, TypeRef> solve() {
+		return N4JSGlobals.sw.measure("infCtx", false, () -> {
+			return solveInternal();
+		});
+	}
+
+	private Map<InferenceVariable, TypeRef> solveInternal() {
 		if (isSolved) {
 			return solution;
 		}

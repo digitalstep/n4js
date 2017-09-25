@@ -18,11 +18,13 @@ import java.util.Collection
 import java.util.List
 import org.eclipse.emf.ecore.util.EcoreUtil.EqualityHelper
 import org.eclipse.n4js.AnnotationDefinition
+import org.eclipse.n4js.N4JSGlobals
 import org.eclipse.n4js.ts.typeRefs.ExistentialTypeRef
 import org.eclipse.n4js.ts.typeRefs.OptionalFieldStrategy
 import org.eclipse.n4js.ts.typeRefs.TypeArgument
 import org.eclipse.n4js.ts.typeRefs.TypeRef
 import org.eclipse.n4js.ts.types.FieldAccessor
+import org.eclipse.n4js.ts.types.PrimitiveType
 import org.eclipse.n4js.ts.types.TField
 import org.eclipse.n4js.ts.types.TGetter
 import org.eclipse.n4js.ts.types.TMember
@@ -46,7 +48,6 @@ import static org.eclipse.n4js.utils.StructuralMembersPredicates.*
 
 import static extension org.eclipse.n4js.typesystem.RuleEnvironmentExtensions.*
 import static extension org.eclipse.n4js.utils.N4JSLanguageUtils.*
-import org.eclipse.n4js.ts.types.PrimitiveType
 
 /**
  */
@@ -69,6 +70,20 @@ class StructuralTypingComputer extends TypeSystemHelperStrategy {
 	}
 
 	public def StructuralTypingResult isStructuralSubtype(RuleEnvironment G, TypeRef left, TypeRef right) {
+		val isPartOfConstraintSolving = N4JSGlobals.sw.isRunning("infCtx");
+		if(isPartOfConstraintSolving) {
+			return N4JSGlobals.sw.measure("structural subtype check", true, [
+				return N4JSGlobals.sw.measure("structural subtype check (in infCtx)", true, [
+					return isStructuralSubtypeInternal(G, left, right);
+				]);
+			]);
+		} else {
+			return N4JSGlobals.sw.measure("structural subtype check", true, [
+				return isStructuralSubtypeInternal(G, left, right);
+			]);
+		}
+	}
+	private def StructuralTypingResult isStructuralSubtypeInternal(RuleEnvironment G, TypeRef left, TypeRef right) {
 
 		val rightStrategy = right.typingStrategy;
 		val leftStrategy = left.typingStrategy;

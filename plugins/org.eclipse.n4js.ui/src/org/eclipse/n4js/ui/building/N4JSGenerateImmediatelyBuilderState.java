@@ -166,6 +166,21 @@ public class N4JSGenerateImmediatelyBuilderState extends ClusteringBuilderState 
 	protected Collection<Delta> doUpdate(BuildData buildData, ResourceDescriptionsData newData,
 			IProgressMonitor monitor) {
 
+		N4JSGlobals.sw.reset();
+
+		final Collection<Delta> result = N4JSGlobals.sw.measure("fullBuild", false, () -> {
+			return doUpdateInternal(buildData, newData, monitor);
+		});
+
+		N4JSGlobals.sw.assertNoneRunning();
+		N4JSGlobals.sw.printElapsed();
+
+		return result;
+	}
+
+	private Collection<Delta> doUpdateInternal(BuildData buildData, ResourceDescriptionsData newData,
+			IProgressMonitor monitor) {
+
 		builderStateLogger.log("N4JSGenerateImmediatelyBuilderState.doUpdate() >>>");
 		logBuildData(buildData, " of before #doUpdate");
 

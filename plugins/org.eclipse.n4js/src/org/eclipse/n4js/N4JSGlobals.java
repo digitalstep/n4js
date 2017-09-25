@@ -16,6 +16,8 @@ import static java.util.Collections.unmodifiableCollection;
 
 import java.util.Collection;
 
+import org.eclipse.n4js.utils.StopWatch;
+
 /**
  * Global hook for static information about the current setup.
  *
@@ -23,6 +25,8 @@ import java.util.Collection;
  *
  */
 public final class N4JSGlobals {
+
+	public static final StopWatch sw = new StopWatch();
 
 	/**
 	 * Files extension of JS source files (<b>not</b> including the separator dot).
