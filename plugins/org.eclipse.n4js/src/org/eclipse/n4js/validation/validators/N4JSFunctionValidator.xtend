@@ -10,11 +10,15 @@
  */
 package org.eclipse.n4js.validation.validators
 
+import com.google.common.base.Strings
 import com.google.inject.Inject
 import java.util.List
 import org.eclipse.emf.common.util.EList
 import org.eclipse.emf.ecore.EObject
 import org.eclipse.emf.ecore.EStructuralFeature
+import org.eclipse.n4js.flowgraphs.N4JSFlowAnalyzer
+import org.eclipse.n4js.flowgraphs.analysers.DeadCodeVisitor
+import org.eclipse.n4js.flowgraphs.analysers.DeadCodeVisitor.DeadCodeRegion
 import org.eclipse.n4js.n4JS.ArrowFunction
 import org.eclipse.n4js.n4JS.Block
 import org.eclipse.n4js.n4JS.ExportDeclaration
@@ -45,10 +49,12 @@ import org.eclipse.n4js.ts.types.Type
 import org.eclipse.n4js.ts.utils.TypeUtils
 import org.eclipse.n4js.typesystem.N4JSTypeSystem
 import org.eclipse.n4js.utils.N4JSLanguageHelper
+import org.eclipse.n4js.utils.StopWatchIDE2852
 import org.eclipse.n4js.utils.nodemodel.HiddenLeafAccess
 import org.eclipse.n4js.utils.nodemodel.HiddenLeafs
 import org.eclipse.n4js.validation.AbstractN4JSDeclarativeValidator
 import org.eclipse.n4js.validation.JavaScriptVariantHelper
+import org.eclipse.n4js.validation.N4JSElementKeywordProvider
 import org.eclipse.n4js.validation.helper.N4JSLanguageConstants
 import org.eclipse.xtext.EcoreUtil2
 import org.eclipse.xtext.nodemodel.util.NodeModelUtils
@@ -65,11 +71,6 @@ import static org.eclipse.xtext.util.Strings.toFirstUpper
 import static extension com.google.common.base.Strings.*
 import static extension org.eclipse.n4js.typesystem.RuleEnvironmentExtensions.*
 import static extension org.eclipse.n4js.utils.EcoreUtilN4.*
-import org.eclipse.n4js.flowgraphs.analysers.DeadCodeVisitor
-import org.eclipse.n4js.flowgraphs.analysers.DeadCodeVisitor.DeadCodeRegion
-import org.eclipse.n4js.flowgraphs.N4JSFlowAnalyzer
-import org.eclipse.n4js.validation.N4JSElementKeywordProvider
-import com.google.common.base.Strings
 
 /**
  */
@@ -108,6 +109,12 @@ class N4JSFunctionValidator extends AbstractN4JSDeclarativeValidator {
 	 */
 	@Check
 	def checkFlowGraphs(Script script) {
+		StopWatchIDE2852.sw.measure(StopWatchIDE2852.FLOW_GRAPH_VALIDATION, false, [
+			internalCheckFlowGraphs(script);
+		]);
+	}
+
+	private def internalCheckFlowGraphs(Script script) {
 		// Note: The Flow Graph is NOT stored in the meta info cache. Hence, it is created here at use site.
 		// In case the its creation is moved to the N4JSPostProcessor, care about an increase in memory consumption.
 		val N4JSFlowAnalyzer flowAnalyzer = new N4JSFlowAnalyzer();

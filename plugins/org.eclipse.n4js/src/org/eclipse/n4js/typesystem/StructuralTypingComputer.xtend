@@ -18,7 +18,6 @@ import java.util.Collection
 import java.util.List
 import org.eclipse.emf.ecore.util.EcoreUtil.EqualityHelper
 import org.eclipse.n4js.AnnotationDefinition
-import org.eclipse.n4js.N4JSGlobals
 import org.eclipse.n4js.ts.typeRefs.ExistentialTypeRef
 import org.eclipse.n4js.ts.typeRefs.OptionalFieldStrategy
 import org.eclipse.n4js.ts.typeRefs.TypeArgument
@@ -35,6 +34,7 @@ import org.eclipse.n4js.ts.types.TypingStrategy
 import org.eclipse.n4js.ts.types.util.Variance
 import org.eclipse.n4js.ts.utils.TypeCompareUtils
 import org.eclipse.n4js.typesystem.constraints.TypeConstraint
+import org.eclipse.n4js.utils.StopWatchIDE2852
 import org.eclipse.n4js.utils.StructuralMembersTriple
 import org.eclipse.n4js.utils.StructuralTypesHelper
 import org.eclipse.n4js.validation.N4JSElementKeywordProvider
@@ -70,15 +70,15 @@ class StructuralTypingComputer extends TypeSystemHelperStrategy {
 	}
 
 	public def StructuralTypingResult isStructuralSubtype(RuleEnvironment G, TypeRef left, TypeRef right) {
-		val isPartOfConstraintSolving = N4JSGlobals.sw.isRunning("infCtx");
+		val isPartOfConstraintSolving = StopWatchIDE2852.sw.isRunning(StopWatchIDE2852.INF_CTX);
 		if(isPartOfConstraintSolving) {
-			return N4JSGlobals.sw.measure("structural subtype check", true, [
-				return N4JSGlobals.sw.measure("structural subtype check (in infCtx)", true, [
+			return StopWatchIDE2852.sw.measure(StopWatchIDE2852.STRUCT_SUBTYPE_CHECK, true, [
+				return StopWatchIDE2852.sw.measure(StopWatchIDE2852.STRUCT_SUBTYPE_CHECK_IN_INF_CTX, true, [
 					return isStructuralSubtypeInternal(G, left, right);
 				]);
 			]);
 		} else {
-			return N4JSGlobals.sw.measure("structural subtype check", true, [
+			return StopWatchIDE2852.sw.measure(StopWatchIDE2852.STRUCT_SUBTYPE_CHECK, true, [
 				return isStructuralSubtypeInternal(G, left, right);
 			]);
 		}

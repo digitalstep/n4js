@@ -34,6 +34,7 @@ import org.eclipse.n4js.ui.building.BuilderStateLogger.BuilderState;
 import org.eclipse.n4js.ui.building.instructions.IBuildParticipantInstruction;
 import org.eclipse.n4js.ui.internal.ContributingResourceDescriptionPersister;
 import org.eclipse.n4js.ui.internal.N4JSActivator;
+import org.eclipse.n4js.utils.StopWatchIDE2852;
 import org.eclipse.xtext.builder.IXtextBuilderParticipant;
 import org.eclipse.xtext.builder.IXtextBuilderParticipant.BuildType;
 import org.eclipse.xtext.builder.clustering.ClusteringBuilderState;
@@ -166,14 +167,14 @@ public class N4JSGenerateImmediatelyBuilderState extends ClusteringBuilderState 
 	protected Collection<Delta> doUpdate(BuildData buildData, ResourceDescriptionsData newData,
 			IProgressMonitor monitor) {
 
-		N4JSGlobals.sw.reset();
+		StopWatchIDE2852.sw.reset();
 
-		final Collection<Delta> result = N4JSGlobals.sw.measure("fullBuild", false, () -> {
+		final Collection<Delta> result = StopWatchIDE2852.sw.measure(StopWatchIDE2852.FULL_BUILD, false, () -> {
 			return doUpdateInternal(buildData, newData, monitor);
 		});
 
-		N4JSGlobals.sw.assertNoneRunning();
-		N4JSGlobals.sw.printElapsed();
+		StopWatchIDE2852.sw.assertNoneRunning();
+		StopWatchIDE2852.sw.printElapsed();
 
 		return result;
 	}

@@ -10,6 +10,7 @@
  */
 package org.eclipse.n4js.utils;
 
+import java.util.Formatter;
 import java.util.Map;
 import java.util.Objects;
 import java.util.Random;
@@ -125,6 +126,7 @@ public class StopWatch {
 			maxElapsed = Math.max(maxElapsed, e.sw.elapsed(TimeUnit.MILLISECONDS));
 		}
 		final StringBuilder sb = new StringBuilder();
+		final Formatter formatter = new Formatter(sb);
 		for (SWEntry e : watches.values()) {
 			if (sb.length() > 0) {
 				sb.append(separator);
@@ -134,11 +136,11 @@ public class StopWatch {
 				sb.append(' ');
 			}
 			sb.append(": ");
-			sb.append(Double.toString(elapsedDbl(e.id, desiredUnit)));
-			sb.append(" (");
-			sb.append(Long.toString(Math.round(e.sw.elapsed(TimeUnit.MILLISECONDS) / ((double) maxElapsed) * 100.0)));
-			sb.append("%)");
+			formatter.format("%7.3f (%3d%%)",
+					elapsedDbl(e.id, desiredUnit),
+					Math.round(e.sw.elapsed(TimeUnit.MILLISECONDS) / ((double) maxElapsed) * 100.0));
 		}
+		formatter.close();
 		return sb.toString();
 	}
 

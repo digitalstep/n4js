@@ -11,7 +11,6 @@
 package org.eclipse.n4js.typesbuilder
 
 import com.google.inject.Inject
-import org.eclipse.n4js.N4JSGlobals
 import org.eclipse.n4js.n4JS.ExportableElement
 import org.eclipse.n4js.n4JS.ExportedVariableStatement
 import org.eclipse.n4js.n4JS.FunctionDeclaration
@@ -41,6 +40,7 @@ import org.eclipse.n4js.ts.types.TInterface
 import org.eclipse.n4js.ts.types.TModule
 import org.eclipse.n4js.ts.types.TVariable
 import org.eclipse.n4js.ts.types.TypesFactory
+import org.eclipse.n4js.utils.StopWatchIDE2852
 import org.eclipse.n4js.validation.JavaScriptVariantHelper
 import org.eclipse.xtext.naming.IQualifiedNameConverter
 import org.eclipse.xtext.resource.DerivedStateAwareResource
@@ -141,7 +141,7 @@ public class N4JSTypesBuilder {
 	 * as declared type. The parameterized type ref is then assigned as type ref to the {@link TVariable}.
 	 */
 	def public void createTModuleFromSource(DerivedStateAwareResource resource, boolean preLinkingPhase) {
-		N4JSGlobals.sw.measure("types builder", false, [
+		StopWatchIDE2852.sw.measure(StopWatchIDE2852.TYPES_BUILDER, false, [
 			createTModuleFromSourceInternal(resource, preLinkingPhase);
 		]);
 	}

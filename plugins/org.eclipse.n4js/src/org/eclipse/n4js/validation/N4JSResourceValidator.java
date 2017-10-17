@@ -18,9 +18,9 @@ import java.util.stream.Stream;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.resource.Resource;
 import org.eclipse.emf.ecore.util.EcoreUtil;
-import org.eclipse.n4js.N4JSGlobals;
 import org.eclipse.n4js.projectModel.IN4JSCore;
 import org.eclipse.n4js.resource.N4JSResource;
+import org.eclipse.n4js.utils.StopWatchIDE2852;
 import org.eclipse.xtext.service.OperationCanceledManager;
 import org.eclipse.xtext.util.CancelIndicator;
 import org.eclipse.xtext.util.IAcceptor;
@@ -85,7 +85,7 @@ public class N4JSResourceValidator extends ResourceValidatorImpl {
 	protected void validate(Resource resource, CheckMode mode, CancelIndicator cancelIndicator,
 			IAcceptor<Issue> acceptor) {
 
-		N4JSGlobals.sw.measure("validation", false, () -> {
+		StopWatchIDE2852.sw.measure(StopWatchIDE2852.VALIDATION, false, () -> {
 			validateInternal(resource, mode, cancelIndicator, acceptor);
 		});
 	}

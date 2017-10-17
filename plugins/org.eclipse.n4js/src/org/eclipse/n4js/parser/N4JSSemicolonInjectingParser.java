@@ -15,9 +15,9 @@ import java.io.Reader;
 
 import org.antlr.runtime.TokenSource;
 import org.eclipse.emf.common.util.WrappedException;
-import org.eclipse.n4js.N4JSGlobals;
 import org.eclipse.n4js.parser.antlr.N4JSParser;
 import org.eclipse.n4js.parser.antlr.internal.InternalN4JSParser;
+import org.eclipse.n4js.utils.StopWatchIDE2852;
 import org.eclipse.xtext.parser.IParseResult;
 import org.eclipse.xtext.parser.antlr.XtextTokenStream;
 
@@ -55,7 +55,7 @@ public class N4JSSemicolonInjectingParser extends N4JSParser {
 	 */
 	@Override
 	public IParseResult doParse(Reader reader) {
-		return N4JSGlobals.sw.measure("parser (only N4JS)", false, () -> {
+		return StopWatchIDE2852.sw.measure(StopWatchIDE2852.PARSER, false, () -> {
 			try {
 				return parse(getDefaultRuleName(), new AntlrStreamWithToString(reader));
 			} catch (IOException e) {

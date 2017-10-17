@@ -18,7 +18,6 @@ import org.eclipse.emf.common.util.TreeIterator;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EReference;
 import org.eclipse.emf.ecore.util.EcoreUtil;
-import org.eclipse.n4js.N4JSGlobals;
 import org.eclipse.n4js.resource.N4JSResource;
 import org.eclipse.n4js.resource.PostProcessingAwareResource;
 import org.eclipse.n4js.resource.PostProcessingAwareResource.PostProcessor;
@@ -27,6 +26,7 @@ import org.eclipse.n4js.ts.types.Type;
 import org.eclipse.n4js.ts.types.TypesPackage;
 import org.eclipse.n4js.typesbuilder.N4JSTypesBuilder;
 import org.eclipse.n4js.utils.EcoreUtilN4;
+import org.eclipse.n4js.utils.StopWatchIDE2852;
 import org.eclipse.n4js.utils.UtilN4;
 import org.eclipse.xtext.service.OperationCanceledManager;
 import org.eclipse.xtext.util.CancelIndicator;
@@ -59,7 +59,7 @@ public class N4JSPostProcessor implements PostProcessor {
 
 	@Override
 	public void performPostProcessing(PostProcessingAwareResource resource, CancelIndicator cancelIndicator) {
-		N4JSGlobals.sw.measure("post-processing", true, () -> {
+		StopWatchIDE2852.sw.measure(StopWatchIDE2852.POST_PROCESSING, true, () -> {
 			performPostProcessingInternal(resource, cancelIndicator);
 		});
 	}

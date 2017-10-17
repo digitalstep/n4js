@@ -26,6 +26,7 @@ import org.eclipse.n4js.resource.XpectAwareFileExtensionCalculator
 import org.eclipse.n4js.ts.types.TModule
 import org.eclipse.n4js.utils.Log
 import org.eclipse.n4js.utils.ResourceType
+import org.eclipse.n4js.utils.StopWatchIDE2852
 import org.eclipse.xtend.lib.annotations.Accessors
 import org.eclipse.xtext.generator.AbstractFileSystemAccess
 import org.eclipse.xtext.generator.IFileSystemAccess
@@ -96,7 +97,7 @@ abstract class AbstractSubGenerator implements ISubGenerator {
 	 * </ul>
 	 */
 	override doGenerate(Resource input, IFileSystemAccess fsa) {
-		N4JSGlobals.sw.measure("transpiler", false, [
+		StopWatchIDE2852.sw.measure(StopWatchIDE2852.TRANSPILER, false, [
 			doGenerateInternal(input, fsa);
 		]);
 	}
