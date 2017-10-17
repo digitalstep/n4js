@@ -49,6 +49,9 @@ public class N4JSPostProcessor implements PostProcessor {
 	@Inject
 	private OperationCanceledManager operationCanceledManager;
 
+	@Inject
+	private TEMP temp;
+
 	@Override
 	public boolean expectsLazyLinkResolution() {
 		// we do our lazy link resolution while walking the AST together with scoping, typing, etc.
@@ -62,8 +65,15 @@ public class N4JSPostProcessor implements PostProcessor {
 		try {
 			// we assume this will not be called for other PostProcessingAwareResource than N4JSResource
 			postProcessN4JSResource((N4JSResource) resource, cancelIndicator);
+
+			if (resource.getResourceSet() != null
+					&& !resource.getResourceSet().getResources().isEmpty()
+					&& resource == resource.getResourceSet().getResources().get(0)) {
+				temp.investigate((N4JSResource) resource);
+			}
 		} catch (Throwable th) {
 			operationCanceledManager.propagateIfCancelException(th);
+
 			if (hasBrokenAST) {
 				// swallow exception, AST is broken due to parse error anyway
 			} else {
