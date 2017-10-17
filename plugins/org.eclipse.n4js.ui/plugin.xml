@@ -1343,4 +1343,29 @@ Contributors:
          </command>
       </menuContribution>
    </extension>
+   <extension
+         point="org.eclipse.ui.menus">
+      <menuContribution
+            allPopups="false"
+            locationURI="menu:org.eclipse.ui.main.menu">
+         <menu
+               id="IDE2852"
+               label="IDE2852">
+            <command
+                  commandId="org.eclipse.n4js.ui.MassOpen"
+                  label="Mass Open"
+                  style="push"
+                  tooltip="Opens massive amount of files!">
+            </command>
+         </menu>
+      </menuContribution>
+   </extension>
+   <extension
+         point="org.eclipse.ui.commands">
+      <command
+            defaultHandler="org.eclipse.n4js.ui.utils.MassOpenHandler"
+            id="org.eclipse.n4js.ui.MassOpen"
+            name="Mass Open">
+      </command>
+   </extension>
 </plugin>
