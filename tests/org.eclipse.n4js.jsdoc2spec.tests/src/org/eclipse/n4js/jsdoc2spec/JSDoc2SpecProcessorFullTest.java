@@ -20,6 +20,7 @@ import org.eclipse.xtext.resource.XtextResourceSet;
 import org.eclipse.xtext.testing.InjectWith;
 import org.eclipse.xtext.testing.XtextRunner;
 import org.junit.ComparisonFailure;
+import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
