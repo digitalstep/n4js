@@ -125,6 +125,7 @@ abstract public class JSDoc2SpecProcessorFullTest {
 	 * Full test with SpecSample9 project, cf. IDE-2160
 	 */
 	@Test
+  @Ignore
 	public void testSample9() throws IOException, InterruptedException {
 		fullTest("SpecSample9_StaticPolyfill");
 	}
