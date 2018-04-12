@@ -43,7 +43,7 @@ RUN sed -i -e 's|MAVEN_CENTRAL_URL|'"$MAVEN_CENTRAL_URL"'|g' /usr/share/maven/re
 
 #
 # The remaining part has been inspired by:
-# https://github.com/nodejs/docker-node/blob/master/8.9/wheezy/Dockerfile
+# https://github.com/nodejs/docker-node/blob/master/8/wheezy/Dockerfile
 #
 
 RUN groupadd --gid 1000 node && \
